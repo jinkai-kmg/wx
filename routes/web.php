@@ -18,3 +18,4 @@ Route::get('/', function () {
 
 
 Route::any("test","TestController@index");
+Route::any("getaccess","TestController@getAccessToken");
