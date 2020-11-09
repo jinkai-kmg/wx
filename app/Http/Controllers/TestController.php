@@ -63,8 +63,7 @@ class TestController extends Controller
             $xml_str = file_get_contents("php://input");
             //记录日志
             file_put_contents("wx_event.log",$xml_str);
-            //把xml文本转换为php的对象或数组
-            $data = simplexml_load_string($xml_str,'SimpleXMLElement',LIBXML_NOCDATA);
+
             $xml = "<xml>
                         <ToUserName><![CDATA[toUser]]></ToUserName>
                         <FromUserName><![CDATA[FromUser]]></FromUserName>
