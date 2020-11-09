@@ -64,16 +64,10 @@ class TestController extends Controller
             //记录日志
             file_put_contents("wx_event.log",$xml_str);
 
-            $xml = "<xml>
-                        <ToUserName><![CDATA[toUser]]></ToUserName>
-                        <FromUserName><![CDATA[FromUser]]></FromUserName>
-                        <CreateTime>123456789</CreateTime>
-                        <MsgType><![CDATA[event]]></MsgType>
-                        <Event><![CDATA[subscribe]]></Event>
-                    </xml>";
-            echo    $xml;
+            echo    "";
+            die;
         }else{
-
+            echo    "";
         }
     }
 }
