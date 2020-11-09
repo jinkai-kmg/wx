@@ -17,5 +17,9 @@ Route::get('/', function () {
 
 
 
-Route::any("test","TestController@index");
+Route::any("test","TestController@wxEvent");
 Route::any("getaccess","TestController@getAccessToken");
+
+
+Route::get("test2","TestController@test2");
+Route::post("test3","TestController@test3");
