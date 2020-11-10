@@ -95,7 +95,7 @@ class TestController extends Controller
                 'key' => 'WX_KEY_0001'
             ],
             [
-                'button' => 'view',
+                'type' => 'view',
                 'name' => 'baidu',
                 'url' => 'https://www.baidu.com'
             ]
