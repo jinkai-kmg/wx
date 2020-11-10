@@ -21,35 +21,7 @@ class TestController extends Controller
         $tmpStr = sha1( $tmpStr );
 
         if( $tmpStr == $signature ){
-            $xml_str = file_get_contents("php://input");
-            $data = simplexml_load_string($xml_str, 'SimpleXMLElement', LIBXML_NOCDATA);
-            if (strtolower($data->MsgType) == "event") {
-                if (strtolower($data->Event == 'subscribe')) {
-                    //回复用户消息(纯文本格式)
-                    $toUser = $data->FromUserName;
-                    $fromUser = $data->ToUserName;
-                    $msgType = 'text';
-                    $content = '欢迎关注';
-                    //根据OPENID获取用户信息（并且入库）
-                    //1.获取openid
-                    $token = "shanyi";
-                    $url="https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$token."&openid=".$toUser."&lang=zh_CN";
-                    file_put_contents('wx_event.log',$url);
-                    $user=file_get_contents($url);
-                    $user=json_decode($user,true);
-                        $content="欢迎回来";
-                    //%s代表字符串(发送信息)
-                    $template = "<xml>
-                                <ToUserName><![CDATA[%s]]></ToUserName>
-                                <FromUserName><![CDATA[%s]]></FromUserName>
-                                <CreateTime>%s</CreateTime>
-                                <MsgType><![CDATA[%s]]></MsgType>
-                                <Content><![CDATA[%s]]></Content>
-                                </xml>";
-                    $info = sprintf($template, $toUser, $fromUser, time(), $msgType, $content);
-                    return $info;
-                }
-            }
+            return true;
         }else{
             return false;
         }
@@ -90,6 +62,19 @@ class TestController extends Controller
             //记录日志
             file_put_contents("wx_event.log",$xml_str);
 
+            $data = simplexml_load_string($xml_str, 'SimpleXMLElement', LIBXML_NOCDATA);
+            if (strtolower($data->MsgType) == "event") {
+                if (strtolower($data->Event == 'subscribe')) {
+                    //回复用户消息(纯文本格式)
+                    $toUser = $data->FromUserName;
+                    $fromUser = $data->ToUserName;
+                    $msgType = 'text';
+                    $content = '欢迎关注';
+                    //%s代表字符串(发送信息)
+                    $info = $this->responseText($data,$content);
+                    return $info;
+                }
+            }
             echo    "";
             die;
         }else{
@@ -100,7 +85,7 @@ class TestController extends Controller
 
     }
     //处理消息
-    private function responseText($xml,$content){
+    public function responseText($xml,$content){
         $fromUserName=$xml->ToUserName;
         $toUserName=$xml->FromUserName;
         $time=time();
@@ -112,6 +97,6 @@ class TestController extends Controller
                        <MsgType><![CDATA[%s]]></MsgType>
                        <Content><![CDATA[%s]]></Content>
                        </xml>";//发送//来自//时间//类型//内容
-        echo sprintf($template,$toUserName,$fromUserName,$time,$msgType,$content);
+        return sprintf($template,$toUserName,$fromUserName,$time,$msgType,$content);
     }
 }
