@@ -37,8 +37,8 @@
       <file leaf-file-name="web.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3859649">
-              <caret line="20" column="42" selection-start-line="20" selection-start-column="37" selection-end-line="20" selection-end-column="42" />
+            <state vertical-scroll-proportion="0.42105263">
+              <caret line="21" column="54" selection-start-line="21" selection-start-column="54" selection-end-line="21" selection-end-column="54" />
               <folding />
             </state>
           </provider>
@@ -441,8 +441,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3859649">
-          <caret line="20" column="42" selection-start-line="20" selection-start-column="37" selection-end-line="20" selection-end-column="42" />
+        <state vertical-scroll-proportion="0.42105263">
+          <caret line="21" column="54" selection-start-line="21" selection-start-column="54" selection-end-line="21" selection-end-column="54" />
           <folding />
         </state>
       </provider>

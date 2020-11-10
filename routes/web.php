@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 Route::prefix('/wx')->group(function(){
 //    Route::get("/","TestController@index");
-    Route::post("/","TestController@wxEvent");
+    Route::match(['get','post'],"/","TestController@wxEvent");
     Route::any("/token","TestController@getAccessToken");   //获取access_token
 });
 
