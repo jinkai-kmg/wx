@@ -47,7 +47,7 @@ class TestController extends Controller
     /*
      * 接受微信推送事件
     */
-    public function wxEvent(){
+    public function wxEvent(Request $request){
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];
@@ -56,11 +56,16 @@ class TestController extends Controller
         sort($tmpArr, SORT_STRING);
         $tmpStr = implode( $tmpArr );
         $tmpStr = sha1( $tmpStr );
+        $echostr = $request->echostr;
+        if(!empty($echostr)){
+            echo $echostr;
+            die;
+        }
         if($tmpStr == $signature){
             //接受数据
             $xml_str = file_get_contents("php://input");
             //记录日志
-            //file_put_contents("wx_event.log",$xml_str);
+            file_put_contents("wx_event.log",$xml_str);
 
             $data = simplexml_load_string($xml_str);
             if (strtolower($data->MsgType) == "event") {
