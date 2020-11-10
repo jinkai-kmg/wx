@@ -16,10 +16,16 @@ Route::get('/', function () {
 });
 
 
-Route::any("wx","TestController@index");
-Route::any("test","TestController@wxEvent");
-Route::any("getaccess","TestController@getAccessToken");
+
+Route::prefix('/wx')->group(function(){
+    Route::any("/","TestController@index");
+    Route::any("test","TestController@wxEvent");
+    Route::any("/token","TestController@getAccessToken");   //获取access_token
+});
 
 
-Route::get("test2","TestController@test2");
-Route::post("test3","TestController@test3");
+
+Route::prefix('/test')->group(function(){
+    Route::get("test2","TestController@test2");
+    Route::post("test3","TestController@test3");
+});

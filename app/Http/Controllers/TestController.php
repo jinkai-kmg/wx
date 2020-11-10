@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
+use GuzzleHttp\Client;
 
 class TestController extends Controller
 {
-
+    //接入微信
     private function index()
     {
         $signature = $_GET["signature"];
@@ -20,11 +21,58 @@ class TestController extends Controller
         $tmpStr = sha1( $tmpStr );
 
         if( $tmpStr == $signature ){
-            return true;
+            $xml_str = file_get_contents("php://input");
+            $data = simplexml_load_string($xml_str, 'SimpleXMLElement', LIBXML_NOCDATA);
+            if (strtolower($data->MsgType) == "event") {
+                if (strtolower($data->Event == 'subscribe')) {
+                    //回复用户消息(纯文本格式)
+                    $toUser = $data->FromUserName;
+                    $fromUser = $data->ToUserName;
+                    $msgType = 'text';
+                    $content = '欢迎关注';
+                    //根据OPENID获取用户信息（并且入库）
+                    //1.获取openid
+                    $token=$this->token();
+                    $url="https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$token."&openid=".$toUser."&lang=zh_CN";
+                    file_put_contents('wx_event.log',$url);
+                    $user=file_get_contents($url);
+                    $user=json_decode($user,true);
+                    $wxuser=UserModel::where('openid',$user['openid'])->first();
+                    if(!empty($wxuser)){
+                        $content="欢迎回来";
+                    }else{
+                        $data=[
+                            "subscribe" => $user['subscribe'],
+                            "openid" => $user["openid"],
+                            "nickname" => $user["nickname"],
+                            "sex" => $user["sex"],
+                            "city" => $user["city"],
+                            "country" => $user["country"],
+                            "province" => $user["province"],
+                            "language" => $user["language"],
+                            "headimgurl" => $user["headimgurl"],
+                            "subscribe_time" => $user["subscribe_time"],
+                            "subscribe_scene" => $user["subscribe_scene"]
+                        ];
+                        $data=UserModel::insert($data);
+                    }
+                    //%s代表字符串(发送信息)
+                    $template = "<xml>
+                                <ToUserName><![CDATA[%s]]></ToUserName>
+                                <FromUserName><![CDATA[%s]]></FromUserName>
+                                <CreateTime>%s</CreateTime>
+                                <MsgType><![CDATA[%s]]></MsgType>
+                                <Content><![CDATA[%s]]></Content>
+                                </xml>";
+                    $info = sprintf($template, $toUser, $fromUser, time(), $msgType, $content);
+                    return $info;
+                }
+            }
         }else{
             return false;
         }
     }
+    //获取access_token
     public function getAccessToken(){
         $key = 'wx:access_token';
         $token = Redis::get($key);
@@ -42,6 +90,9 @@ class TestController extends Controller
         }
         echo $token;
     }
+    /*
+     * 接受微信推送事件
+    */
     public function wxEvent(){
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
@@ -62,5 +113,23 @@ class TestController extends Controller
         }else{
             echo    "";
         }
+    }
+    public function guzzle(){
+
+    }
+    //处理消息
+    private function responseText($xml,$content){
+        $fromUserName=$xml->ToUserName;
+        $toUserName=$xml->FromUserName;
+        $time=time();
+        $msgType="text";
+        $template="<xml>
+                       <ToUserName><![CDATA[%s]]></ToUserName>
+                       <FromUserName><![CDATA[%s]]></FromUserName>
+                       <CreateTime>%s</CreateTime>
+                       <MsgType><![CDATA[%s]]></MsgType>
+                       <Content><![CDATA[%s]]></Content>
+                       </xml>";//发送//来自//时间//类型//内容
+        echo sprintf($template,$toUserName,$fromUserName,$time,$msgType,$content);
     }
 }
