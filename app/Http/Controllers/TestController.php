@@ -42,7 +42,7 @@ class TestController extends Controller
             Redis::set($key,$token);
             Redis::expire($key,3600);
         }
-        echo $token;
+        return $token;
     }
     /*
      * 接受微信推送事件
@@ -91,12 +91,12 @@ class TestController extends Controller
         $arr = [
             'button' => [
                 'type' => $type,
-                'name' => '今日歌曲',
+                'name' => 'music',
                 'key' => 'WX_KEY_0001'
             ],
             [
                 'button' => 'view',
-                'name' => '百度',
+                'name' => 'baidu',
                 'url' => 'https://www.baidu.com'
             ]
         ];
@@ -109,7 +109,8 @@ class TestController extends Controller
             'verify'    => false,    //忽略 HTTPS证书 验证
             'body' => $arr
         ]);
-        echo    $res_menu;
+        $data = $res_menu->getBody();
+        echo    $data;
     }
     public function guzzle(){
 
