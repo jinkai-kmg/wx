@@ -62,7 +62,7 @@ class TestController extends Controller
             //记录日志
             file_put_contents("wx_event.log",$xml_str);
 
-            $data = simplexml_load_string($xml_str, 'SimpleXMLElement', LIBXML_NOCDATA);
+            $data = simplexml_load_string($xml_str);
             if (strtolower($data->MsgType) == "event") {
                 if (strtolower($data->Event == 'subscribe')) {
                     $content = "欢迎关注";
