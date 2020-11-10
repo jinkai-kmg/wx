@@ -109,7 +109,7 @@ class TestController extends Controller
             'verify'    => false,    //忽略 HTTPS证书 验证
             'body' => $arr
         ]);
-        print_r($res_menu);
+        echo    $res_menu;
     }
     public function guzzle(){
 
