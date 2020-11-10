@@ -72,7 +72,9 @@ class TestController extends Controller
                 if (strtolower($data->Event == 'subscribe')) {
                     $content = "欢迎关注";
                     $info = $this->response($data,$content);
-                    echo $info;die;
+                    echo $info;
+
+                    die;
                 }
             }
             echo    "";
@@ -80,6 +82,33 @@ class TestController extends Controller
         }else{
             echo    "";
         }
+    }
+    /*
+     * 自定义菜单
+     */
+    public function menu(){
+        $type = "click";
+        $arr = [
+            'button' => [
+                'type' => $type,
+                'name' => '今日歌曲',
+                'key' => 'WX_KEY_0001'
+            ],
+            [
+                'button' => 'view',
+                'name' => '百度',
+                'url' => 'https://www.baidu.com'
+            ]
+        ];
+        $arr = json_decode($arr);
+        $access_token = $this->getAccessToken();
+        $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$access_token;
+        $client = new Client();
+        $response = $client->request('POST',$url,[
+            'verify'    => false,    //忽略 HTTPS证书 验证
+            'body' => $arr
+        ]);
+        print_r($response);
     }
     public function guzzle(){
 

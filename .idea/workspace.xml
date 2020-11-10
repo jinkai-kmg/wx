@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6c25f14e-d434-44b5-86d0-f1d50224bbb1" name="默认的" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Middleware/VerifyCsrfToken.php" afterPath="$PROJECT_DIR$/app/Http/Middleware/VerifyCsrfToken.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/TestController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/TestController.php" />
     </list>
     <ignored path="WX.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -38,31 +38,31 @@
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-9.230769">
-              <caret line="21" column="54" selection-start-line="21" selection-start-column="54" selection-end-line="21" selection-end-column="54" />
+              <caret line="21" column="28" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VerifyCsrfToken.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="VerifyCsrfToken.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Middleware/VerifyCsrfToken.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.71929824">
+            <state vertical-scroll-proportion="-15.769231">
               <caret line="23" column="12" selection-start-line="23" selection-start-column="12" selection-end-line="23" selection-end-column="12" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TestController.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="TestController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/TestController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.8461537">
-              <caret line="11" column="26" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="26" />
+            <state vertical-scroll-proportion="-0.75438595">
+              <caret line="77" column="17" selection-start-line="77" selection-start-column="17" selection-end-line="77" selection-end-column="17" />
               <folding>
                 <element signature="e#40#68#0#PHP" expanded="true" />
-                <marker date="1604978661979" expanded="true" signature="2642:2687" placeholder="..." />
-                <marker date="1604978661979" expanded="true" signature="2642:2967" placeholder="..." />
+                <marker date="1604987997776" expanded="true" signature="3449:3494" placeholder="..." />
+                <marker date="1604987997776" expanded="true" signature="3449:3774" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -78,9 +78,9 @@
       <list>
         <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/TestController.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/app/Http/Middleware/VerifyCsrfToken.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/TestController.php" />
       </list>
     </option>
   </component>
@@ -359,8 +359,8 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
-            <marker date="1604978661979" expanded="true" signature="2642:2687" placeholder="..." />
-            <marker date="1604978661979" expanded="true" signature="2642:2967" placeholder="..." />
+            <marker date="1604987997776" expanded="true" signature="3449:3494" placeholder="..." />
+            <marker date="1604987997776" expanded="true" signature="3449:3774" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -387,8 +387,8 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
-            <marker date="1604978661979" expanded="true" signature="2642:2687" placeholder="..." />
-            <marker date="1604978661979" expanded="true" signature="2642:2967" placeholder="..." />
+            <marker date="1604987997776" expanded="true" signature="3449:3494" placeholder="..." />
+            <marker date="1604987997776" expanded="true" signature="3449:3774" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -399,8 +399,8 @@
           <caret line="8" column="25" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="25" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
-            <marker date="1604978661979" expanded="true" signature="2642:2687" placeholder="..." />
-            <marker date="1604978661979" expanded="true" signature="2642:2967" placeholder="..." />
+            <marker date="1604987997776" expanded="true" signature="3449:3494" placeholder="..." />
+            <marker date="1604987997776" expanded="true" signature="3449:3774" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -429,31 +429,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/TestController.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Middleware/VerifyCsrfToken.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.8461537">
-          <caret line="11" column="26" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="26" />
-          <folding>
-            <element signature="e#40#68#0#PHP" expanded="true" />
-            <marker date="1604978661979" expanded="true" signature="2642:2687" placeholder="..." />
-            <marker date="1604978661979" expanded="true" signature="2642:2967" placeholder="..." />
-          </folding>
+        <state vertical-scroll-proportion="-15.769231">
+          <caret line="23" column="12" selection-start-line="23" selection-start-column="12" selection-end-line="23" selection-end-column="12" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-9.230769">
-          <caret line="21" column="54" selection-start-line="21" selection-start-column="54" selection-end-line="21" selection-end-column="54" />
+          <caret line="21" column="28" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Middleware/VerifyCsrfToken.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/TestController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.71929824">
-          <caret line="23" column="12" selection-start-line="23" selection-start-column="12" selection-end-line="23" selection-end-column="12" />
-          <folding />
+        <state vertical-scroll-proportion="-0.75438595">
+          <caret line="77" column="17" selection-start-line="77" selection-start-column="17" selection-end-line="77" selection-end-column="17" />
+          <folding>
+            <element signature="e#40#68#0#PHP" expanded="true" />
+            <marker date="1604987997776" expanded="true" signature="3449:3494" placeholder="..." />
+            <marker date="1604987997776" expanded="true" signature="3449:3774" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
