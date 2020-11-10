@@ -106,8 +106,7 @@ class TestController extends Controller
         $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$access_token;
         $client = new Client();
         $res_menu = $client->request('POST',$url,[
-            'verify'    => false,    //忽略 HTTPS证书 验证'
-
+            'verify'    => false,    //忽略 HTTPS证书 验证
             'body' => $arr
         ]);
         print_r($res_menu);
