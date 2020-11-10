@@ -90,6 +90,7 @@ class TestController extends Controller
         $type = "click";
         $arr = [
             'button' => [
+                [
                 'type' => $type,
                 'name' => 'music',
                 'key' => 'WX_KEY_0001'
@@ -98,6 +99,7 @@ class TestController extends Controller
                 'type' => 'view',
                 'name' => 'baidu',
                 'url' => 'https://www.baidu.com'
+            ]
             ]
         ];
         $arr = json_encode($arr);
