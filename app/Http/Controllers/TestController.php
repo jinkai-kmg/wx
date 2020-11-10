@@ -32,30 +32,12 @@ class TestController extends Controller
                     $content = '欢迎关注';
                     //根据OPENID获取用户信息（并且入库）
                     //1.获取openid
-                    $token=$this->token();
+                    $token = "shanyi";
                     $url="https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$token."&openid=".$toUser."&lang=zh_CN";
                     file_put_contents('wx_event.log',$url);
                     $user=file_get_contents($url);
                     $user=json_decode($user,true);
-                    $wxuser=UserModel::where('openid',$user['openid'])->first();
-                    if(!empty($wxuser)){
                         $content="欢迎回来";
-                    }else{
-                        $data=[
-                            "subscribe" => $user['subscribe'],
-                            "openid" => $user["openid"],
-                            "nickname" => $user["nickname"],
-                            "sex" => $user["sex"],
-                            "city" => $user["city"],
-                            "country" => $user["country"],
-                            "province" => $user["province"],
-                            "language" => $user["language"],
-                            "headimgurl" => $user["headimgurl"],
-                            "subscribe_time" => $user["subscribe_time"],
-                            "subscribe_scene" => $user["subscribe_scene"]
-                        ];
-                        $data=UserModel::insert($data);
-                    }
                     //%s代表字符串(发送信息)
                     $template = "<xml>
                                 <ToUserName><![CDATA[%s]]></ToUserName>
