@@ -87,19 +87,18 @@ class TestController extends Controller
      * 自定义菜单
      */
     public function menu(){
-        $type = "click";
         $arr = [
             'button' => [
                 [
-                'type' => $type,
+                'type' => 'click',
                 'name' => 'music',
-                'key' => 'WX_KEY_0001'
-            ],
-            [
+                'key' => 'wx_key_0001'
+                ],
+                [
                 'type' => 'view',
                 'name' => 'baidu',
                 'url' => 'https://www.baidu.com'
-            ]
+                ]
             ]
         ];
         $arr = json_encode($arr);
