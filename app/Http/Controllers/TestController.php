@@ -100,15 +100,15 @@ class TestController extends Controller
                 'url' => 'https://www.baidu.com'
             ]
         ];
-        $arr = json_decode($arr);
+        $arr = json_encode($arr);
         $access_token = $this->getAccessToken();
         $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$access_token;
         $client = new Client();
-        $response = $client->request('POST',$url,[
+        $res_menu = $client->request('POST',$url,[
             'verify'    => false,    //忽略 HTTPS证书 验证
             'body' => $arr
         ]);
-        print_r($response);
+        print_r($res_menu);
     }
     public function guzzle(){
 
