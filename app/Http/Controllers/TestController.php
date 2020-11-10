@@ -60,7 +60,7 @@ class TestController extends Controller
             //接受数据
             $xml_str = file_get_contents("php://input");
             //记录日志
-            file_put_contents("wx_event.log",$xml_str);
+            //file_put_contents("wx_event.log",$xml_str);
 
             $data = simplexml_load_string($xml_str);
             if (strtolower($data->MsgType) == "event") {
@@ -86,13 +86,13 @@ class TestController extends Controller
         $toUserName=$xml->FromUserName;
         $time=time();
         $msgType="text";
-        $template="<xml>
+        $xml="<xml>
                        <ToUserName><![CDATA[%s]]></ToUserName>
                        <FromUserName><![CDATA[%s]]></FromUserName>
                        <CreateTime>%s</CreateTime>
                        <MsgType><![CDATA[%s]]></MsgType>
                        <Content><![CDATA[%s]]></Content>
                        </xml>";//发送//来自//时间//类型//内容
-        return sprintf($template,$toUserName,$fromUserName,$time,$msgType,$content);
+        return sprintf($xml,$toUserName,$fromUserName,$time,$msgType,$content);
     }
 }
