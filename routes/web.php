@@ -18,8 +18,8 @@ Route::get('/', function () {
 
 
 Route::prefix('/wx')->group(function(){
-    Route::get("/","TestController@index");
-    Route::post("/","TestController@wxEvent");
+    Route::any("/","TestController@index");
+    Route::any("/","TestController@wxEvent");
     Route::any("/token","TestController@getAccessToken");   //获取access_token
 });
 

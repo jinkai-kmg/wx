@@ -66,8 +66,7 @@ class TestController extends Controller
             if (strtolower($data->MsgType) == "event") {
                 if (strtolower($data->Event == 'subscribe')) {
                     $content = "欢迎关注";
-                    //%s代表字符串(发送信息)
-                    $info = $this->responseText($data,$content);
+                    $info = $this->response($data,$content);
                     echo $info;die;
                 }
             }
@@ -81,7 +80,7 @@ class TestController extends Controller
 
     }
     //处理消息
-    public function responseText($xml,$content){
+    public function response($xml,$content){
         $fromUserName=$xml->ToUserName;
         $toUserName=$xml->FromUserName;
         $time=time();
