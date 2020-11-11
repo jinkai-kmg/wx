@@ -90,16 +90,45 @@ class TestController extends Controller
         $arr = [
             'button' => [
                 [
-                'type' => 'click',
-                'name' => 'music',
-                'key' => 'wx_key_0001'
+                    'type' => 'view',
+                    'name' => 'du',
+                    'url' => 'https://www.baidu.com'
                 ],
                 [
-                'type' => 'view',
-                'name' => 'baidu',
-                'url' => 'https://www.baidu.com'
+                    'type' => 'click',
+                    'name' => 'card',
+                    'key' => 'wx_key_0002'
+                ],
+                [
+                    'type' => 'view',
+                    'name' => 'weather',
+                    'url' => 'https://www.baidu.com'
+                ],
+                [
+                    'name' => 'put',
+                    'sub_button' => [
+                        [
+                            'type' => 'pic_sysphoto',
+                            'name' => 'sysphoto',
+                            'key' => 'rselfmenu_1_0',
+                            "sub_button" => [ ]
+                        ],
+                        [
+                            "type" => "pic_photo_or_album",
+                            "name" => "album",
+                            "key" => "rselfmenu_1_1",
+                            "sub_button" => [ ]
+                        ],
+                        [
+                            "type" => "pic_weixin",
+                            "name" => "weixin",
+                            "key" => "rselfmenu_1_2",
+                            "sub_button" => [ ]
+                        ]
+                    ]
                 ]
             ]
+
         ];
         $arr = json_encode($arr);
         $access_token = $this->getAccessToken();
@@ -130,5 +159,38 @@ class TestController extends Controller
                        <Content><![CDATA[%s]]></Content>
                        </xml>";//发送//来自//时间//类型//内容
         return sprintf($xml,$toUserName,$fromUserName,$time,$msgType,$content);
+    }
+    public function weater(){
+        $url = "https://devapi.qweather.com/v7/weather/now?location=101010100&key=3b20b6ae1ba348c4afdc9545926f1694&gzip=n";
+        $red = $this->curl($url);
+        $red = json_decode($red,true);
+        $rea = $red('now');
+        $rea = implode(',',$rea);
+        return $rea;
+    }
+    //调用接口方法
+    public function curl($url,$header="",$content=[]){
+        $ch = curl_init(); //初始化CURL句柄
+        if(substr($url,0,5)=="https"){
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,2);
+        }
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,true); //字符串类型打印
+        curl_setopt($ch, CURLOPT_URL, $url); //设置请求的URL
+        if(!empty($header)){
+            curl_setopt ($ch, CURLOPT_HTTPHEADER,$header);
+        }
+        if($content){
+            curl_setopt ($ch, CURLOPT_POST,true);
+            curl_setopt ($ch, CURLOPT_POSTFIELDS,$content);
+        }
+        //执行
+        $output = curl_exec($ch);
+        if($error=curl_error($ch)){
+            die($error);
+        }
+        //关闭
+        curl_close($ch);
+        return $output;
     }
 }
