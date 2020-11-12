@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use GuzzleHttp\Client;
+use App\Models\WxuserModel;
 
 class TestController extends Controller
 {
+    protected $str_obj;
     //接入微信
     private function index()
     {
@@ -70,11 +72,24 @@ class TestController extends Controller
             $data = simplexml_load_string($xml_str);
             if (strtolower($data->MsgType) == "event") {
                 if (strtolower($data->Event == 'subscribe')) {
-                    $content = "欢迎关注";
+                    $openid = $data->FromUserName;
+                    $user = WxuserModel::where(['openid'=>$openid])->first();
+                    if($user){
+                        $userinfo = $this->getUserInfo($openid);
+                        unset($userinfo['remark']);
+                        unset($userinfo['groupid']);
+                        unset($userinfo['tagid_list']);
+                        unset($userinfo['subscribe_scene']);
+                        unset($userinfo['qr_scene']);
+                        unset($userinfo['qr_scene_str']);
+                        WxuserModel::insertGetId($userinfo);
+                        $content = "欢迎关注";
+                    }else{
+                        $content = "欢迎再次关注";
+                    }
                     $info = $this->response($data,$content);
                     echo $info;
 
-                    die;
                 }
             }
             echo    "";
@@ -90,47 +105,41 @@ class TestController extends Controller
         $arr = [
             'button' => [
                 [
-                    'type' => 'view',
-                    'name' => 'du',
-                    'url' => 'https://www.baidu.com'
-                ],
-                [
                     'type' => 'click',
-                    'name' => 'card',
+                    'name' => '签到',
                     'key' => 'wx_key_0002'
                 ],
                 [
                     'type' => 'view',
-                    'name' => 'weather',
-                    'url' => 'https://www.baidu.com'
+                    'name' => '获取天气',
+                    'url' => 'http://2004jk.wx.comcto.com/wx/weater'
                 ],
                 [
-                    'name' => 'put',
+                    'name' => '发图',
                     'sub_button' => [
                         [
                             'type' => 'pic_sysphoto',
-                            'name' => 'sysphoto',
+                            'name' => '系统拍照发图',
                             'key' => 'rselfmenu_1_0',
                             "sub_button" => [ ]
                         ],
                         [
                             "type" => "pic_photo_or_album",
-                            "name" => "album",
+                            "name" => "拍照或者相册发图",
                             "key" => "rselfmenu_1_1",
                             "sub_button" => [ ]
                         ],
                         [
                             "type" => "pic_weixin",
-                            "name" => "weixin",
+                            "name" => "微信相册发图",
                             "key" => "rselfmenu_1_2",
                             "sub_button" => [ ]
                         ]
                     ]
                 ]
             ]
-
         ];
-        $arr = json_encode($arr);
+        $arr = json_encode($arr,JSON_UNESCAPED_UNICODE);
         $access_token = $this->getAccessToken();
 //        echo    $access_token;die;
         $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$access_token;
@@ -168,6 +177,18 @@ class TestController extends Controller
         $rea = implode(',',$rea);
         return $rea;
     }
+
+    //获取用户信息
+    public function getUserInfo($openid){
+        $access = $this->getAccessToken();
+        $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$access."&openid=".$openid."&lang=zh_CN";
+        $client = new Client();
+        $res = $client->request('GET',$url,[
+            'verify'    => false,    //忽略 HTTPS证书 验证
+        ]);
+        return json_decode($res->getBody(),true);
+    }
+
     //调用接口方法
     public function curl($url,$header="",$content=[]){
         $ch = curl_init(); //初始化CURL句柄
