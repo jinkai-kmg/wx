@@ -70,11 +70,16 @@ class TestController extends Controller
             file_put_contents("wx_event.log",$xml_str);
 
             $data = simplexml_load_string($xml_str);
+//            print_r($data);die;
             if (strtolower($data->MsgType) == "event") {
                 if (strtolower($data->Event == 'subscribe')) {
                     $openid = $data->FromUserName;
+//                    print_r($openid);die;
                     $user = WxuserModel::where(['openid'=>$openid])->first();
                     if($user){
+
+                        $content = "欢迎再次关注";
+                    }else{
                         $userinfo = $this->getUserInfo($openid);
                         unset($userinfo['remark']);
                         unset($userinfo['groupid']);
@@ -84,8 +89,6 @@ class TestController extends Controller
                         unset($userinfo['qr_scene_str']);
                         WxuserModel::insertGetId($userinfo);
                         $content = "欢迎关注";
-                    }else{
-                        $content = "欢迎再次关注";
                     }
                     $info = $this->response($data,$content);
                     echo $info;
