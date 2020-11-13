@@ -57,8 +57,7 @@ class TestController extends Controller
                     $this->subscribe();
                     $content = "欢迎关注";
                 }
-                $info = $this->response($data,$content);
-                echo $info;die;
+                echo $this->response($content);die;
             }else{
                 //取消关注
             }
@@ -73,8 +72,7 @@ class TestController extends Controller
         if(strtolower($data->MsgType) == "text") {
             if (strtolower($data->Content) == "你好") {
                 $content = "你好ya";
-                $info = $this->response($data, $content);
-                echo $info;
+                echo $this->response($content);
                 die;
             }
         }
@@ -87,8 +85,8 @@ class TestController extends Controller
 
     //处理文本消息
     public function response($content){
-        $fromUserName = $this->str_obj->ToUserName;
-        $toUserName = $this->str_obj->FromUserName;
+        $fromUserName=$this->str_obj->ToUserName;
+        $toUserName=$this->str_obj->FromUserName;
         $time=time();
         $msgType="text";
         $xml="<xml>
@@ -187,7 +185,7 @@ class TestController extends Controller
         $red = json_decode($red,true);
         $rea = $red['now'];
         $rea = implode(',',$rea);
-        return $rea;
+        echo    $rea;
     }
 
     //获取用户信息
