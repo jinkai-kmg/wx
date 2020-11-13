@@ -63,7 +63,8 @@ class TestController extends Controller
             }
             if(strtolower($data->Event) == 'click'){
                 if(strtolower($data->EventKey) == 'wx_key_weather'){
-                    echo    $this->weather();die;
+                    $content = $this->weather();
+                    echo    $this->response($content);die;
                 }
             }
         }
@@ -185,7 +186,7 @@ class TestController extends Controller
         $red = json_decode($red,true);
         $rea = $red['now'];
         $rea = implode(',',$rea);
-        echo    $rea;
+        return    $rea;
     }
 
     //获取用户信息
