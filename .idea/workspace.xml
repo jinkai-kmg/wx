@@ -47,11 +47,11 @@
       <file leaf-file-name="TestController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/TestController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.31578946">
-              <caret line="66" column="56" selection-start-line="66" selection-start-column="56" selection-end-line="66" selection-end-column="56" />
+            <state vertical-scroll-proportion="0.6666667">
+              <caret line="61" column="22" selection-start-line="61" selection-start-column="22" selection-end-line="61" selection-end-column="22" />
               <folding>
                 <element signature="e#40#68#0#PHP" expanded="true" />
-                <marker date="1605239582092" expanded="true" signature="2521:2846" placeholder="..." />
+                <marker date="1605239779532" expanded="true" signature="2521:2846" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -313,7 +313,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26066098" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
@@ -378,7 +378,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
-            <marker date="1605239582092" expanded="true" signature="2521:2846" placeholder="..." />
+            <marker date="1605239779532" expanded="true" signature="2521:2846" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -405,7 +405,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
-            <marker date="1605239582092" expanded="true" signature="2521:2846" placeholder="..." />
+            <marker date="1605239779532" expanded="true" signature="2521:2846" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -432,7 +432,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
-            <marker date="1605239582092" expanded="true" signature="2521:2846" placeholder="..." />
+            <marker date="1605239779532" expanded="true" signature="2521:2846" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -443,7 +443,7 @@
           <caret line="8" column="25" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="25" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
-            <marker date="1605239582092" expanded="true" signature="2521:2846" placeholder="..." />
+            <marker date="1605239779532" expanded="true" signature="2521:2846" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -504,11 +504,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/TestController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31578946">
-          <caret line="66" column="56" selection-start-line="66" selection-start-column="56" selection-end-line="66" selection-end-column="56" />
+        <state vertical-scroll-proportion="0.6666667">
+          <caret line="61" column="22" selection-start-line="61" selection-start-column="22" selection-end-line="61" selection-end-column="22" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
-            <marker date="1605239582092" expanded="true" signature="2521:2846" placeholder="..." />
+            <marker date="1605239779532" expanded="true" signature="2521:2846" placeholder="..." />
           </folding>
         </state>
       </provider>
