@@ -37,39 +37,52 @@ class TestController extends Controller
             echo $echostr;
             die;
         }
-            //接受数据
-            $xml_str = file_get_contents("php://input");
-            //记录日志
-            file_put_contents("wx_event.log",$xml_str);
+        //接受数据
+        $xml_str = file_get_contents("php://input");
+        //记录日志
+        file_put_contents("wx_event.log",$xml_str);
 
-            $data = simplexml_load_string($xml_str);
+        $data = simplexml_load_string($xml_str);
 //            print_r($data);die;
-            $this->str_obj = $data;
+        $this->str_obj = $data;
 
-            if (strtolower($data->MsgType) == "event") {
-                if (strtolower($data->Event == 'subscribe')) {
-                    $openid = $this->str_obj->FromUserName;
-                    $user = WxuserModel::where(['openid'=>$openid])->first();
-                    if($user){
-                        $content = "欢迎再次关注";
-                    }else {
-                        $this->subscribe();
-                        $content = "欢迎关注";
-                    }
-                    $info = $this->response($data,$content);
-                    echo $info;die;
-                }else{
-                    //取消关注
+        //关注取消关注
+        if (strtolower($data->MsgType) == "event") {
+            if (strtolower($data->Event) == 'subscribe') {
+                $openid = $this->str_obj->FromUserName;
+                $user = WxuserModel::where(['openid'=>$openid])->first();
+                if($user){
+                    $content = "欢迎再次关注";
+                }else {
+                    $this->subscribe();
+                    $content = "欢迎关注";
+                }
+                $info = $this->response($data,$content);
+                echo $info;die;
+            }else{
+                //取消关注
+            }
+            if(strtolower($data->Event) == 'click'){
+                if(strtolower($data->EventKey) == 'wx_key_weather'){
+                    $this->weather();
                 }
             }
-            if(strtolower($data->MsgType) == "text"){
-                if(strtolower($data->Content) == "你好") {
-                    $content = "你好ya";
-                    $info = $this->response($data, $content);
-                    echo $info;
-                    die;
-                }
+        }
+
+        //文本回复
+        if(strtolower($data->MsgType) == "text") {
+            if (strtolower($data->Content) == "你好") {
+                $content = "你好ya";
+                $info = $this->response($data, $content);
+                echo $info;
+                die;
             }
+        }
+
+        //图片消息
+        if(strtolower($data->MsgType) == "image"){
+
+        }
     }
 
     //处理文本消息
@@ -97,12 +110,12 @@ class TestController extends Controller
                 [
                     'type' => 'click',
                     'name' => '签到',
-                    'key' => 'wx_key_0002'
+                    'key' => 'wx_key_card'
                 ],
                 [
-                    'type' => 'view',
+                    'type' => 'click',
                     'name' => '获取天气',
-                    'url' => 'http://2004jk.wx.comcto.com/wx/weater'
+                    'key' => 'wx_key_weather'
                 ],
                 [
                     'name' => '发图',
@@ -168,7 +181,7 @@ class TestController extends Controller
     }
 
     //获取天气
-    public function weater(){
+    public function weather(){
         $url = "https://devapi.qweather.com/v7/weather/now?location=101010100&key=3b20b6ae1ba348c4afdc9545926f1694&gzip=n";
         $red = $this->curl($url);
         $red = json_decode($red,true);
