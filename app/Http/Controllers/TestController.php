@@ -186,7 +186,8 @@ class TestController extends Controller
         $red = $this->curl($url);
         $red = json_decode($red,true);
         $rea = $red['now'];
-        $data = "时间：".$rea['obsTime']."风向:".$rea['windDir'];
+//        dd($rea);
+        $data = "时间:".$rea['obsTime']."天气:".$rea['text']."地区:北京"."风向:".$rea['windDir'];
         return    $data;
     }
 
