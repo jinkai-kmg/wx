@@ -9,7 +9,7 @@ use App\Models\WxuserModel;
 
 class TestController extends Controller
 {
-    protected $str_obj;
+    public $str_obj;
     //接入微信
     private function index()
     {
@@ -21,49 +21,22 @@ class TestController extends Controller
         sort($tmpArr, SORT_STRING);
         $tmpStr = implode( $tmpArr );
         $tmpStr = sha1( $tmpStr );
-
         if( $tmpStr == $signature ){
             return true;
         }else{
             return false;
         }
     }
-    //获取access_token
-    public function getAccessToken(){
-        $key = 'wx:access_token';
-        $token = Redis::get($key);
-        if($token){
-            echo    "有缓存";
-        }else{
-            echo    "无";
-            $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET');
-//        dd($url);
-            $response = file_get_contents($url);
-            $data = json_decode($response,true);
-            $token = $data['access_token'];
-            Redis::set($key,$token);
-            Redis::expire($key,3600);
-        }
-        return $token;
-    }
+
     /*
      * 接受微信推送事件
     */
     public function wxEvent(Request $request){
-        $signature = $_GET["signature"];
-        $timestamp = $_GET["timestamp"];
-        $nonce = $_GET["nonce"];
-        $token = "shanyi";
-        $tmpArr = array($token, $timestamp, $nonce);
-        sort($tmpArr, SORT_STRING);
-        $tmpStr = implode( $tmpArr );
-        $tmpStr = sha1( $tmpStr );
         $echostr = $request->echostr;
         if(!empty($echostr)){
             echo $echostr;
             die;
         }
-        if($tmpStr == $signature){
             //接受数据
             $xml_str = file_get_contents("php://input");
             //记录日志
@@ -71,36 +44,50 @@ class TestController extends Controller
 
             $data = simplexml_load_string($xml_str);
 //            print_r($data);die;
+            $this->str_obj = $data;
+
             if (strtolower($data->MsgType) == "event") {
                 if (strtolower($data->Event == 'subscribe')) {
-                    $openid = $data->FromUserName;
-//                    print_r($openid);die;
+                    $openid = $this->str_obj->FromUserName;
                     $user = WxuserModel::where(['openid'=>$openid])->first();
                     if($user){
-
                         $content = "欢迎再次关注";
-                    }else{
-                        $userinfo = $this->getUserInfo($openid);
-                        unset($userinfo['remark']);
-                        unset($userinfo['groupid']);
-                        unset($userinfo['tagid_list']);
-                        unset($userinfo['subscribe_scene']);
-                        unset($userinfo['qr_scene']);
-                        unset($userinfo['qr_scene_str']);
-                        WxuserModel::insertGetId($userinfo);
+                    }else {
+                        $this->subscribe();
                         $content = "欢迎关注";
                     }
                     $info = $this->response($data,$content);
-                    echo $info;
-
+                    echo $info;die;
+                }else{
+                    //取消关注
                 }
             }
-            echo    "";
-            die;
-        }else{
-            echo    "";
-        }
+            if(strtolower($data->MsgType) == "text"){
+                if(strtolower($data->Content) == "你好") {
+                    $content = "你好ya";
+                    $info = $this->response($data, $content);
+                    echo $info;
+                    die;
+                }
+            }
     }
+
+    //处理文本消息
+    public function response($xml,$content){
+        $fromUserName=$xml->ToUserName;
+        $toUserName=$xml->FromUserName;
+        $time=time();
+        $msgType="text";
+        $xml="<xml>
+                       <ToUserName><![CDATA[%s]]></ToUserName>
+                       <FromUserName><![CDATA[%s]]></FromUserName>
+                       <CreateTime>%s</CreateTime>
+                       <MsgType><![CDATA[%s]]></MsgType>
+                       <Content><![CDATA[%s]]></Content>
+                       </xml>";//发送//来自//时间//类型//内容
+        return sprintf($xml,$toUserName,$fromUserName,$time,$msgType,$content);
+    }
+
     /*
      * 自定义菜单
      */
@@ -157,21 +144,30 @@ class TestController extends Controller
     public function guzzle(){
 
     }
-    //处理消息
-    public function response($xml,$content){
-        $fromUserName=$xml->ToUserName;
-        $toUserName=$xml->FromUserName;
-        $time=time();
-        $msgType="text";
-        $xml="<xml>
-                       <ToUserName><![CDATA[%s]]></ToUserName>
-                       <FromUserName><![CDATA[%s]]></FromUserName>
-                       <CreateTime>%s</CreateTime>
-                       <MsgType><![CDATA[%s]]></MsgType>
-                       <Content><![CDATA[%s]]></Content>
-                       </xml>";//发送//来自//时间//类型//内容
-        return sprintf($xml,$toUserName,$fromUserName,$time,$msgType,$content);
+
+    //获取access_token
+    public function getAccessToken(){
+        $key = 'wx:access_token';
+        $token = Redis::get($key);
+        if($token){
+            echo    "有缓存";
+        }else{
+            echo    "无";
+            $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET');
+//        dd($url);
+            $client = new Client();
+            $res = $client->request('GET',$url,['verify' => false]);
+            $response = $res->getBody();
+//            $response = file_get_contents($url);
+            $data = json_decode($response,true);
+            $token = $data['access_token'];
+            Redis::set($key,$token);
+            Redis::expire($key,3600);
+        }
+        return $token;
     }
+
+    //获取天气
     public function weater(){
         $url = "https://devapi.qweather.com/v7/weather/now?location=101010100&key=3b20b6ae1ba348c4afdc9545926f1694&gzip=n";
         $red = $this->curl($url);
@@ -190,6 +186,32 @@ class TestController extends Controller
             'verify'    => false,    //忽略 HTTPS证书 验证
         ]);
         return json_decode($res->getBody(),true);
+    }
+
+    /*
+     * 新增临时素材
+     */
+    public function media(){
+        $type = 'image';
+        $access = $this->getAccessToken();
+        $url = 'https://api.weixin.qq.com/cgi-bin/media/upload?access_token='.$access.'&type='.$type;
+        $client = new   Client();
+
+    }
+
+    /*
+     * 用户信息入库
+     * */
+    public function subscribe(){
+        $openid = $this->str_obj->FromUserName;
+            $userinfo = $this->getUserInfo($openid);
+            unset($userinfo['remark']);
+            unset($userinfo['groupid']);
+            unset($userinfo['tagid_list']);
+            unset($userinfo['subscribe_scene']);
+            unset($userinfo['qr_scene']);
+            unset($userinfo['qr_scene_str']);
+            WxuserModel::insertGetId($userinfo);
     }
 
     //调用接口方法
