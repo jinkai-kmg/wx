@@ -65,7 +65,7 @@ class TestController extends Controller
             if(strtolower($data->Event) == 'click'){
                 if(strtolower($data->EventKey) == 'wx_key_weather'){
                     $content = $this->weather();
-                    return    $this->response($content);
+                    echo    $this->response($content);die;
                 }
             }
         }
@@ -185,7 +185,9 @@ class TestController extends Controller
         $url = "https://devapi.qweather.com/v7/weather/now?location=101010100&key=3b20b6ae1ba348c4afdc9545926f1694&gzip=n";
         $red = $this->curl($url);
         $red = json_decode($red,true);
-        return    $red;
+        $rea = $red['now'];
+        $data = "时间：".$rea['obsTime']."风向:".$rea['windDir'];
+        return    $data;
     }
 
     //获取用户信息
