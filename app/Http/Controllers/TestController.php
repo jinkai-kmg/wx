@@ -64,7 +64,7 @@ class TestController extends Controller
             if(strtolower($data->Event) == 'click'){
                 if(strtolower($data->EventKey) == 'wx_key_weather'){
                     $content = $this->weather();
-                    echo    $this->response($content);die;
+                    return    $this->response($content);
                 }
             }
         }
