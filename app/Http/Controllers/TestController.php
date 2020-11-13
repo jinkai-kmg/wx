@@ -46,6 +46,7 @@ class TestController extends Controller
         $data = simplexml_load_string($xml_str);
 //            print_r($data);die;
         $this->str_obj = $data;
+        $fromUserName=$this->str_obj->ToUserName;
 
         //关注取消关注
         if (strtolower($data->MsgType) == "event") {
@@ -68,6 +69,21 @@ class TestController extends Controller
                     $content = $this->weather();
                     echo    $this->response($content);die;
                 }
+            }
+            if ($data->Event == 'CLICK') {
+                if ($data->EventKey == 'checkin') {
+                    $key = 'USER_SIGN_' . date('Y_m_d', time());
+                    $content = '签到成功';
+                    $user_sign_info = Redis::zrange($key, 0, -1);
+                    if(in_array((string)$fromUserName,$user_sign_info)){
+                        $content='已经签到，不可重复签到';
+                    }else{
+                        Redis::zadd($key,time(),(string)$fromUserName);
+                    }
+                    $result= $this->response($content);
+                    return $result;
+                }
+
             }
         }
 
@@ -111,12 +127,12 @@ class TestController extends Controller
                 [
                     'type' => 'click',
                     'name' => '签到',
-                    'key' => 'wx_key_card'
+                    'key' => 'checkin'
                 ],
                 [
                     'type' => 'view',
                     'name' => '商城',
-                    'url' => ''
+                    'url' => 'http://2004jk.csazam.top/'
                 ],
                 [
                     'name' => '菜单',
