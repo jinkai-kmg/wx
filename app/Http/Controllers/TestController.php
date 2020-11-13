@@ -229,7 +229,7 @@ class TestController extends Controller
 
         //入库
         $info = [
-            'm_id'  => $media_id,
+            'media_id'  => $media_id,
             'openid'   => $this->str_obj->FromUserName,
             'type'  => $this->str_obj->MsgType,
             'msg_id'  => $this->str_obj->MsgId,
