@@ -58,6 +58,7 @@ class TestController extends Controller
                     $content = "欢迎关注";
                 }
                 echo $this->response($content);die;
+
             }else{
                 //取消关注
             }
@@ -182,9 +183,9 @@ class TestController extends Controller
     //获取天气
     public function weather(){
         $url = "https://devapi.qweather.com/v7/weather/now?location=101010100&key=3b20b6ae1ba348c4afdc9545926f1694&gzip=n";
-        $client = new Client();
-        $res = $client->request('GET',$url,['verify' => false]);
-        return json_decode($res->getBody(),true);
+        $red = $this->curl($url);
+        $red = json_decode($red,true);
+        return    $red;
     }
 
     //获取用户信息

@@ -22,7 +22,6 @@ Route::prefix('/wx')->group(function(){
     Route::match(['get','post'],"/","TestController@wxEvent");
     Route::any("/token","TestController@getAccessToken");   //获取access_token
     Route::any('/menu',"TestController@menu");      //按钮
-    Route::any('/weater',"TestController@weather");      //天气
 });
 
 
