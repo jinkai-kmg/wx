@@ -57,8 +57,8 @@ class TestController extends Controller
                     $this->subscribe();
                     $content = "欢迎关注";
                 }
-
-                echo $this->response($data,$content);die;
+                $info = $this->response($data,$content);
+                echo $info;die;
             }else{
                 //取消关注
             }
@@ -73,7 +73,8 @@ class TestController extends Controller
         if(strtolower($data->MsgType) == "text") {
             if (strtolower($data->Content) == "你好") {
                 $content = "你好ya";
-                echo $this->response($data, $content);
+                $info = $this->response($data, $content);
+                echo $info;
                 die;
             }
         }
