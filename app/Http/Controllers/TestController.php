@@ -57,14 +57,14 @@ class TestController extends Controller
                     $this->subscribe();
                     $content = "欢迎关注";
                 }
-                $info = $this->response($data,$content);
-                echo $info;die;
+
+                echo $this->response($data,$content);die;
             }else{
                 //取消关注
             }
             if(strtolower($data->Event) == 'click'){
                 if(strtolower($data->EventKey) == 'wx_key_weather'){
-                    $this->weather();
+                    echo    $this->weather();die;
                 }
             }
         }
@@ -73,8 +73,7 @@ class TestController extends Controller
         if(strtolower($data->MsgType) == "text") {
             if (strtolower($data->Content) == "你好") {
                 $content = "你好ya";
-                $info = $this->response($data, $content);
-                echo $info;
+                echo $this->response($data, $content);
                 die;
             }
         }
@@ -86,9 +85,9 @@ class TestController extends Controller
     }
 
     //处理文本消息
-    public function response($xml,$content){
-        $fromUserName=$xml->ToUserName;
-        $toUserName=$xml->FromUserName;
+    public function response($content){
+        $fromUserName = $this->str_obj->ToUserName;
+        $toUserName = $this->str_obj->FromUserName;
         $time=time();
         $msgType="text";
         $xml="<xml>
