@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6c25f14e-d434-44b5-86d0-f1d50224bbb1" name="默认的" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/TestController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/TestController.php" />
     </list>
     <ignored path="WX.iws" />
@@ -47,22 +48,12 @@
       <file leaf-file-name="TestController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/TestController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6666667">
-              <caret line="189" column="63" selection-start-line="189" selection-start-column="63" selection-end-line="189" selection-end-column="63" />
+            <state vertical-scroll-proportion="0.5614035">
+              <caret line="229" column="17" selection-start-line="229" selection-start-column="17" selection-end-line="229" selection-end-column="17" />
               <folding>
                 <element signature="e#40#68#0#PHP" expanded="true" />
-                <marker date="1605245897635" expanded="true" signature="2524:2849" placeholder="..." />
+                <marker date="1605249517238" expanded="true" signature="2587:2912" placeholder="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WxuserModel.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Models/WxuserModel.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.923077">
-              <caret line="9" column="29" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -80,6 +71,7 @@
         <option value="$PROJECT_DIR$/app/Models/WxuserModel.php" />
         <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/routes/web.php" />
+        <option value="$PROJECT_DIR$/app/Models/WxMediaModel.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/TestController.php" />
       </list>
     </option>
@@ -378,7 +370,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
-            <marker date="1605245897635" expanded="true" signature="2524:2849" placeholder="..." />
+            <marker date="1605249517238" expanded="true" signature="2587:2912" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -405,7 +397,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
-            <marker date="1605245897635" expanded="true" signature="2524:2849" placeholder="..." />
+            <marker date="1605249517238" expanded="true" signature="2587:2912" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -432,7 +424,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
-            <marker date="1605245897635" expanded="true" signature="2524:2849" placeholder="..." />
+            <marker date="1605249517238" expanded="true" signature="2587:2912" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -443,7 +435,7 @@
           <caret line="8" column="25" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="25" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
-            <marker date="1605245897635" expanded="true" signature="2524:2849" placeholder="..." />
+            <marker date="1605249517238" expanded="true" signature="2587:2912" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -486,14 +478,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/WxuserModel.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.923077">
-          <caret line="9" column="29" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-11.153846">
@@ -502,13 +486,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/WxuserModel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3859649">
+          <caret line="11" column="26" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/WxMediaModel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.31578946">
+          <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/TestController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6666667">
-          <caret line="189" column="63" selection-start-line="189" selection-start-column="63" selection-end-line="189" selection-end-column="63" />
+        <state vertical-scroll-proportion="0.5614035">
+          <caret line="229" column="17" selection-start-line="229" selection-start-column="17" selection-end-line="229" selection-end-column="17" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
-            <marker date="1605245897635" expanded="true" signature="2524:2849" placeholder="..." />
+            <marker date="1605249517238" expanded="true" signature="2587:2912" placeholder="..." />
           </folding>
         </state>
       </provider>

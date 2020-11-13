@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use GuzzleHttp\Client;
 use App\Models\WxuserModel;
+use App\Models\WxMediaModel;
 
 class TestController extends Controller
 {
@@ -81,7 +82,7 @@ class TestController extends Controller
 
         //图片消息
         if(strtolower($data->MsgType) == "image"){
-
+            $this->imageHandler();
         }
     }
 
@@ -113,13 +114,18 @@ class TestController extends Controller
                     'key' => 'wx_key_card'
                 ],
                 [
-                    'type' => 'click',
-                    'name' => '获取天气',
-                    'key' => 'wx_key_weather'
+                    'type' => 'view',
+                    'name' => '商城',
+                    'url' => ''
                 ],
                 [
-                    'name' => '发图',
+                    'name' => '菜单',
                     'sub_button' => [
+                        [
+                            'type' => 'click',
+                            'name' => '获取天气',
+                            'key' => 'wx_key_weather'
+                        ],
                         [
                             'type' => 'pic_sysphoto',
                             'name' => '系统拍照发图',
@@ -203,14 +209,66 @@ class TestController extends Controller
     }
 
     /*
+     * 处理图片消息
+     * */
+    public function imageHandler(){
+        //下载素材
+        $token = $this->getAccessToken();
+        $media_id = $this->str_obj->MediaId;
+        $url = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$token.'&media_id='.$media_id;
+        $img = file_get_contents($url);
+        $media_path = 'upload/cat.jpg';
+        $res = file_put_contents($media_path,$img);
+        if($res)
+        {
+            // TODO 保存成功
+        }else{
+            // TODO 保存失败
+        }
+
+        //入库
+        $info = [
+            'm_id'  => $media_id,
+            'openid'   => $this->str_obj->FromUserName,
+            'type'  => $this->str_obj->MsgType,
+            'msg_id'  => $this->str_obj->MsgId,
+            'create_at'  => $this->str_obj->CreateTime,
+            'media_path'    => $media_path
+        ];
+        WxMediaModel::insertGetId($info);
+    }
+
+    /*
      * 新增临时素材
      */
     public function media(){
         $type = 'image';
         $access = $this->getAccessToken();
         $url = 'https://api.weixin.qq.com/cgi-bin/media/upload?access_token='.$access.'&type='.$type;
-        $client = new   Client();
+        $fileurl = request()->fileurl;
+        $this->media_add($url,$fileurl);
+    }
 
+    /**
+     * 调用接口上传临时素材
+     */
+    private function media_add($api,$fileurl)
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl,CURLOPT_SAFE_UPLOAD,true);
+
+        $data = ['media'    => new \CURLFile($fileurl)];
+
+        curl_setopt($curl,CURLOPT_URL,$api);
+        // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,false);
+        // curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,false);
+        curl_setopt($curl,CURLOPT_POST,1);
+        curl_setopt($curl,CURLOPT_POSTFIELDS,$data);
+        curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($curl,CURLOPT_USERAGENT,"TEST");
+        $result = curl_exec($curl);
+        print_r(json_decode($result,true));
     }
 
     /*
