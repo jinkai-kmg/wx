@@ -33,6 +33,7 @@ Route::prefix('/api')->group(function(){
     Route::any('/goods',"Api\TestController@goods");
     Route::any('/goodsinfo',"Api\TestController@goodsinfo");
     Route::any('/add_cart',"Api\TestController@add_cart");
+    Route::any('/cartinfo',"Api\TestController@cartinfo");
 });
 
 

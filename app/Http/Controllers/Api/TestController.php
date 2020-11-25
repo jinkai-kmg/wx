@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use GuzzleHttp\Client;
 use App\Models\GoodsModel;
+use App\Models\CartModel;
 
 class TestController extends Controller
 {
@@ -124,6 +125,35 @@ class TestController extends Controller
     public function add_cart(){
         $goods_id = request()->goods_id;
 //        return $goods_id;
+//        $goods_id = 217;
+        $goods_info = GoodsModel::where(['goods_id'=>$goods_id])->first()->toArray();
+        unset($goods_info['cat_id']);
+        unset($goods_info['goods_sn']);
+        unset($goods_info['fav_count']);
+        unset($goods_info['click_count']);
+        unset($goods_info['keywords']);
+        unset($goods_info['goods_desc']);
+        unset($goods_info['add_time']);
+        unset($goods_info['is_delete']);
+        unset($goods_info['sale_num']);
+        $res = CartModel::insert($goods_info);
+        if($res){
+            $data = [
+                'errcode' => 0,
+                'errmsg' => 'ok'
+            ];
+        }else{
+            $data = [
+                'errcode' => 1,
+                'errmsg' => '失败'
+            ];
+        }
+        return $data;
     }
 
+    //购物车展示
+    public function cartinfo(){
+        $cartInfo = CartModel::get()->toArray();
+        return $cartInfo;
+    }
 }
