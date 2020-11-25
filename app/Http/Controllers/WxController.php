@@ -8,7 +8,7 @@ use GuzzleHttp\Client;
 use App\Models\WxuserModel;
 use App\Models\WxMediaModel;
 
-class TestController extends Controller
+class WxController extends Controller
 {
     public $str_obj;
     //接入微信
@@ -18,6 +18,7 @@ class TestController extends Controller
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];
         $token = "shanyi";
+
         $tmpArr = array($token, $timestamp, $nonce);
         sort($tmpArr, SORT_STRING);
         $tmpStr = implode( $tmpArr );
@@ -33,20 +34,15 @@ class TestController extends Controller
      * 接受微信推送事件
     */
     public function wxEvent(Request $request){
-        $echostr = $request->echostr;
-        if(!empty($echostr)){
-            echo $echostr;
-            die;
-        }
         //接受数据
         $xml_str = file_get_contents("php://input");
+
         //记录日志
         file_put_contents("wx_event.log",$xml_str);
 
         $data = simplexml_load_string($xml_str);
 //            print_r($data);die;
         $this->str_obj = $data;
-        $fromUserName=$this->str_obj->ToUserName;
 
         //关注取消关注
         if (strtolower($data->MsgType) == "event") {
@@ -69,21 +65,18 @@ class TestController extends Controller
                     $content = $this->weather();
                     echo    $this->response($content);die;
                 }
-            }
-            if ($data->Event == 'CLICK') {
                 if ($data->EventKey == 'checkin') {
                     $key = 'USER_SIGN_' . date('Y_m_d', time());
                     $content = '签到成功';
                     $user_sign_info = Redis::zrange($key, 0, -1);
-                    if(in_array((string)$fromUserName,$user_sign_info)){
+                    if(in_array((string)$this->str_obj->ToUserName,$user_sign_info)){
                         $content='已经签到，不可重复签到';
                     }else{
-                        Redis::zadd($key,time(),(string)$fromUserName);
+                        Redis::zadd($key,time(),(string)$this->str_obj->ToUserName);
                     }
                     $result= $this->response($content);
                     return $result;
                 }
-
             }
         }
 
@@ -176,9 +169,6 @@ class TestController extends Controller
         $data = $res_menu->getBody();
         echo    $data;
     }
-    public function guzzle(){
-
-    }
 
     //获取access_token
     public function getAccessToken(){
@@ -202,6 +192,8 @@ class TestController extends Controller
         return $token;
     }
 
+    //
+
     //获取天气
     public function weather(){
         $url = "https://devapi.qweather.com/v7/weather/now?location=101010100&key=3b20b6ae1ba348c4afdc9545926f1694&gzip=n";
@@ -219,7 +211,7 @@ class TestController extends Controller
         $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$access."&openid=".$openid."&lang=zh_CN";
         $client = new Client();
         $res = $client->request('GET',$url,[
-            'verify'    => false,    //忽略 HTTPS证书 验证
+            'verify'    => false   //忽略 HTTPS证书 验证
         ]);
         return json_decode($res->getBody(),true);
     }
