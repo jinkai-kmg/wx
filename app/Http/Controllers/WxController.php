@@ -18,7 +18,7 @@ class WxController extends Controller
         if($this->checkSignature() && !empty($res)){
             echo $res;
         }
-//        $this->wxEvent();
+        $this->wxEvent();
     }
 
     //接入微信
