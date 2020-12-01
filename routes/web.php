@@ -20,7 +20,7 @@ Route::get('/', function () {
 Route::prefix('/wx')->group(function(){
     Route::match(['get','post'],"/index","WxController@index");
     Route::get("/check","WxController@checkSignature");
-    Route::match(['get','post'],"/","WxController@wxEvent");
+    Route::post("/event","WxController@wxEvent");
     Route::any("/token","WxController@getAccessToken");   //获取access_token
     Route::any('/menu',"WxController@menu");      //按钮
     Route::get('/weater',"WxController@weather");      //天气
