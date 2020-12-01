@@ -18,22 +18,22 @@ Route::get('/', function () {
 
 
 Route::prefix('/wx')->group(function(){
-//    Route::get("/","TestController@index");
+    Route::get("/index","TestController@index");
     Route::match(['get','post'],"/","WxController@wxEvent");
     Route::any("/token","WxController@getAccessToken");   //获取access_token
     Route::any('/menu',"WxController@menu");      //按钮
     Route::get('/weater',"WxController@weather");      //天气
-    Route::any('/xcxlogin',"TestController@xcxlogin");      //小程序
 });
 
 
 Route::prefix('/api')->group(function(){
     Route::match(['get','post'],'/test',"Api\TestController@test");
-    Route::get('/onlogin',"Api\TestController@onLogin");
+    Route::any('/onLogin',"Api\TestController@homeLogin");
     Route::any('/goods',"Api\TestController@goods");
     Route::any('/goodsinfo',"Api\TestController@goodsinfo");
-    Route::any('/add_cart',"Api\TestController@add_cart");
-    Route::any('/cartinfo',"Api\TestController@cartinfo");
+    Route::any('/add_cart',"Api\TestController@add_cart")->middleware('check.token');
+    Route::any('/cartinfo',"Api\TestController@cartinfo")->middleware('check.token');
+    Route::any('/userLogin',"Api\TestController@userLogin");
 });
 
 

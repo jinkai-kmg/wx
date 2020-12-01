@@ -9,40 +9,73 @@ use Illuminate\Support\Facades\Redis;
 use GuzzleHttp\Client;
 use App\Models\GoodsModel;
 use App\Models\CartModel;
+use App\Models\XcxwwxModel;
 
 class TestController extends Controller
 {
     public $str_obj;
 
-    public function test(){
-        print_r($_GET);
-        print_r($_POST);
-    }
-
-    //小程序登录
-    public function onLogin(){
-        //接受code
-        $code = request()->get('code');
-//        echo    $code;
+    /**
+     * 小程序首页登录
+     * @param Request $request
+     */
+    public function homeLogin(Request $request)
+    {
+        //接收code
+        $code = $request->get('code');
+//        return $code;
         //使用code
-        $url = 'https://api.weixin.qq.com/sns/jscode2session?appid='.env('WX_XCX_APPID').'&secret='.env('WX_XCX_SECRET').'&js_code='.$code.'&grant_type=authorization_code';
+        $url = 'https://api.weixin.qq.com/sns/jscode2session?appid=' . env('WX_XCX_APPID') . '&secret=' . env('WX_XCX_SECRET') . '&js_code=' . $code . '&grant_type=authorization_code';
 
-        $data = json_decode(file_get_contents($url),true);
-//        dd($data);
-
+        $data = json_decode(file_get_contents($url), true);
+//        return $data;
         //自定义登录状态
-        if(isset($data['errcode'])){
+        if (isset($data['errcode']))     //有错误
+        {
             $response = [
                 'errno' => 50001,
-                'msg' => '登录失败'
+                'msg' => '登录失败',
             ];
-        }else{
-            $token = sha1($data['openid'].$data['session_key'].mt_rand(0,999999));
-            $redis_key = 'wx_xcx_token'.$token;
-            Redis::set($redis_key,time());
-            Redis::expire($redis_key,7200);
 
-            XcxUserModel::insert($data);
+        } else {              //成功
+            $openid = $data['openid'];          //用户OpenID
+            //判断新用户 老用户
+            $u = XcxUserModel::where(['openid' => $openid])->first();
+            if ($u) {
+                // TODO 老用户
+                $u_id = $u->u_id;
+                //更新用户信息
+
+            } else {
+                // TODO 新用户
+                $u_info = [
+                    'openid' => $openid,
+                    'add_time' => time(),
+                    'type' => 3        //小程序
+                ];
+
+                $u_id = XcxUserModel::insertGetId($u_info);
+            }
+
+            //生成token
+            $token = sha1($data['openid'] . $data['session_key'] . mt_rand(0, 999999));
+            //保存token
+            $redis_login_hash = 'h:xcx:login:' . $token;
+
+            $login_info = [
+                'u_id' => $u_id,
+                'user_name' => "",
+                'login_time' => date('Y-m-d H:i:s'),
+                'login_ip' => $request->getClientIp(),
+                'token' => $token,
+                'openid' => $openid
+            ];
+
+            //保存登录信息
+            Redis::hMset($redis_login_hash, $login_info);
+            // 设置过期时间
+            Redis::expire($redis_login_hash, 7200);
+
             $response = [
                 'errno' => 0,
                 'msg' => 'ok',
@@ -51,44 +84,65 @@ class TestController extends Controller
                 ]
             ];
         }
+
         return $response;
 
     }
 
-    //用户信息
-    public function xcxlogin(){
-        $code = request()->get('code');
-        // echo $code;
-        //使用code
-        $userinfo =json_decode(file_get_contents("php://input"),true);
-        $url = 'https://api.weixin.qq.com/sns/jscode2session?appid='.env('WX_XCX_APPID').'&secret='.env('WX_XCX_SECRET').'&js_code='.$code.'&grant_type=authorization_code';
-        $data = json_decode(file_get_contents($url),true);
-        if(isset($data['errcode'])){
-            $response = [
-                'error' =>50001,
-                'msg' =>'登入失败',
-            ];
-        }else{
-            $openid = $data['openid'];
-            $u = DB::table('wxuser')->where(['openid'=>$openid])->first();
-            if($u){
+    /**
+     * 小程序 个人中心登录
+     * @param Request $request
+     * @return array
+     */
+    public function userLogin(Request $request)
+    {
+        //接收code
+        //$code = $request->get('code');
+        $token = $request->get('token');
 
-            }else{
-                $u_info = [
-                    'openid' => $openid,
-                    'nickname' => $userinfo['u']['nickName'],
-                    'sex' => $userinfo['u']['gender'],
-                    'language' => $userinfo['u']['language'],
-                    'city' => $userinfo['u']['city'],
-                    'province' => $userinfo['u']['province'],
-                    'country' => $userinfo['u']['country'],
-                    'headimgurl' => $userinfo['u']['avatarUrl'],
-                    'subscribe_time' => time(),
-                    'type' =>3
-                ];
-            }
-            DB::table('wxuser')->insertGetId($u_info);
+        //获取用户信息
+        $userinfo = json_decode(file_get_contents("php://input"), true);
+
+        $redis_login_hash = 'h:xcx:login:' . $token;
+        $openid = Redis::hget($redis_login_hash, 'openid');          //用户OpenID
+//        dd($openid);
+        $u0 = XcxwwxModel::where(['openid' => $openid])->first();
+        if(empty($u0)){
+            $u_info = [
+                'openid' => $openid,
+                'nickname' => $userinfo['u']['nickName'],
+                'sex' => $userinfo['u']['gender'],
+                'language' => $userinfo['u']['language'],
+                'city' => $userinfo['u']['city'],
+                'province' => $userinfo['u']['province'],
+                'country' => $userinfo['u']['country'],
+                'headimgurl' => $userinfo['u']['avatarUrl'],
+                'update_time'   => 0
+            ];
+            XcxwwxModel::insert($u_info);
+        }elseif($u0->update_time == 0){     // 未更新过资料
+            //因为用户已经在首页登录过 所以只需更新用户信息表
+            $u_info = [
+                'nickname' => $userinfo['u']['nickName'],
+                'sex' => $userinfo['u']['gender'],
+                'language' => $userinfo['u']['language'],
+                'city' => $userinfo['u']['city'],
+                'province' => $userinfo['u']['province'],
+                'country' => $userinfo['u']['country'],
+                'headimgurl' => $userinfo['u']['avatarUrl'],
+                'update_time'   => time()
+            ];
+            XcxwwxModel::where(['openid' => $openid])->update($u_info);
         }
+
+
+
+        $response = [
+            'errno' => 0,
+            'msg' => 'ok',
+        ];
+
+        return $response;
 
     }
 
@@ -123,37 +177,70 @@ class TestController extends Controller
 
     //添加购物车
     public function add_cart(){
-        $goods_id = request()->goods_id;
-//        return $goods_id;
-//        $goods_id = 217;
-        $goods_info = GoodsModel::where(['goods_id'=>$goods_id])->first()->toArray();
-        unset($goods_info['cat_id']);
-        unset($goods_info['goods_sn']);
-        unset($goods_info['fav_count']);
-        unset($goods_info['click_count']);
-        unset($goods_info['keywords']);
-        unset($goods_info['goods_desc']);
-        unset($goods_info['add_time']);
-        unset($goods_info['is_delete']);
-        unset($goods_info['sale_num']);
-        $res = CartModel::insert($goods_info);
-        if($res){
-            $data = [
-                'errcode' => 0,
-                'errmsg' => 'ok'
+        $goods_id = request()->post('goodsid');
+//        dd($goods_id);
+        $u_id = $_SERVER['u_id'];
+//        dd($u_id);
+        $price = GoodsModel::find($goods_id)->shop_price;
+
+//        dd($price);
+
+        //将商品存储购物车表 或 Redis
+        $info = [
+            'u_id'       => $u_id,
+            'goods_id'  => $goods_id,
+            'goods_num' => 1,
+            'cart_price' => $price,
+            'add_time'  => time()
+        ];
+
+        $id = CartModel::insertGetId($info);
+        if($id)
+        {
+            $response = [
+                'errno' => 0,
+                'msg'   => 'ok'
             ];
         }else{
-            $data = [
-                'errcode' => 1,
-                'errmsg' => '失败'
+            $response = [
+                'errno' => 50002,
+                'msg'   => '加入购物车失败'
             ];
         }
-        return $data;
+
+        return $response;
     }
 
-    //购物车展示
-    public function cartinfo(){
-        $cartInfo = CartModel::get()->toArray();
-        return $cartInfo;
+    /**
+     * 小程序购物车列表
+     */
+    public function cartinfo()
+    {
+//        echo    __LINE__;die;
+        $u_id = $_SERVER['u_id'];
+//        dd($u_id);
+        $goods = CartModel::where(['u_id'=>$u_id])->get();
+        if($goods)      //购物车有商品
+        {
+            $goods = $goods->toArray();
+            foreach($goods as $k=>&$v)
+            {
+                $g = GoodsModel::find($v['goods_id']);
+                $v['goods_name'] = $g->goods_name;
+            }
+        }else{          //购物车无商品
+            $goods = [];
+        }
+
+        //echo '<pre>';print_r($goods);echo '</pre>';die;
+        $response = [
+            'errno' => 0,
+            'msg'   => 'ok',
+            'data'  => [
+                'list'  => $goods
+            ]
+        ];
+
+        return $response;
     }
 }
