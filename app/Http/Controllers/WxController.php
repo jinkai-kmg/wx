@@ -141,7 +141,7 @@ class WxController extends Controller
                 [
                     'type' => 'view',
                     'name' => '商城',
-                    'url' => 'http://2004jk.csazam.top/'
+                    'url' => 'https://jk2004.csazam.top/'
                 ],
                 [
                     'name' => '菜单',
