@@ -82,16 +82,17 @@ class WxController extends Controller
                     echo    $this->response($content);die;
                 }
                 if ($data->EventKey == 'checkin') {
-                    $key = 'USER_SIGN_' . date('Y_m_d', time());
+                    $key = 'USER_SIGN_' . date('Y-m-d',time());
+//                    dd($key);
                     $content = '签到成功';
                     $user_sign_info = Redis::zrange($key, 0, -1);
                     if(in_array((string)$this->str_obj->ToUserName,$user_sign_info)){
                         $content='已经签到，不可重复签到';
                     }else{
-                        Redis::zadd($key,time(),(string)$this->str_obj->ToUserName);
+                        Redis::zadd($key,time(),(string)$this->str_obj->ToUserName);q
                     }
                     $result= $this->response($content);
-                    return $result;
+                    echo $result;
                 }
             }
         }
