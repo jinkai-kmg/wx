@@ -25,6 +25,11 @@ class WxController extends Controller
         $tmpStr = sha1( $tmpStr );
 
         if( $tmpStr == $signature ){
+            //接受数据
+            $xml_str = file_get_contents("php://input");
+
+            //记录日志
+            file_put_contents("wx_event.log",$xml_str);
             return true;
         }else{
             return false;
