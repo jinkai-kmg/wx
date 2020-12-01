@@ -89,7 +89,7 @@ class WxController extends Controller
                     if(in_array((string)$this->str_obj->ToUserName,$user_sign_info)){
                         $content='已经签到，不可重复签到';
                     }else{
-                        Redis::zadd($key,time(),(string)$this->str_obj->ToUserName);q
+                        Redis::zadd($key,time(),(string)$this->str_obj->ToUserName);
                     }
                     $result= $this->response($content);
                     echo $result;
