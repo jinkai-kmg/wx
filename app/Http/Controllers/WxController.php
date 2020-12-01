@@ -12,17 +12,18 @@ class WxController extends Controller
 {
     public $str_obj;
     //接入微信
-    public function index()
+    private function checkSignature()
     {
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];
-        $token = "shanyi";
 
+        $token = "shanyi";
         $tmpArr = array($token, $timestamp, $nonce);
         sort($tmpArr, SORT_STRING);
         $tmpStr = implode( $tmpArr );
         $tmpStr = sha1( $tmpStr );
+
         if( $tmpStr == $signature ){
             return true;
         }else{
