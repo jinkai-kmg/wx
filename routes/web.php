@@ -18,7 +18,7 @@ Route::get('/', function () {
 
 
 Route::prefix('/wx')->group(function(){
-    Route::get("/index","WxController@index");
+    Route::match(['get','post'],"/index","WxController@index");
     Route::get("/check","WxController@checkSignature");
     Route::match(['get','post'],"/","WxController@wxEvent");
     Route::any("/token","WxController@getAccessToken");   //获取access_token
