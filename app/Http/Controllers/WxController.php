@@ -11,6 +11,16 @@ use App\Models\WxMediaModel;
 class WxController extends Controller
 {
     public $str_obj;
+
+    //微信公众平台
+    public function index(){
+        $res = request()->get('echostr','');
+        if($this->checkSignature() && !empty($res)){
+            echo $res;
+        }
+//        $this->wxEvent();
+    }
+
     //接入微信
     public function checkSignature()
     {
