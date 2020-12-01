@@ -18,7 +18,7 @@ class WxController extends Controller
         if($this->checkSignature() && !empty($res)){
             echo $res;
         }
-        $this->wxEvent();
+            $this->wxEvent();
     }
 
     //接入微信
@@ -49,7 +49,7 @@ class WxController extends Controller
     /*
      * 接受微信推送事件
     */
-    public function wxEvent(Request $request){
+    public function wxEvent(){
         //接受数据
         $xml_str = file_get_contents("php://input");
 
