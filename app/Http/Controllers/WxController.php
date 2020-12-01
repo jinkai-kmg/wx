@@ -12,7 +12,7 @@ class WxController extends Controller
 {
     public $str_obj;
     //接入微信
-    private function checkSignature()
+    public function checkSignature()
     {
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
