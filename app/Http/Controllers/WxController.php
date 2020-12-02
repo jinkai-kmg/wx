@@ -102,7 +102,7 @@ class WxController extends Controller
             if (preg_match("/([\x81-\xfe][\x40-\xfe])/", strtolower($data->Content), $match)) {
                 $text = strtolower($data->Content);
                 $content = $this->fanyi($text);
-                echo $this->response($content);
+                echo $this->response($content['newslist']);
                 die;
             }
         }
