@@ -115,7 +115,7 @@ class WxController extends Controller
 
     //翻译接口
     public function fanyi($text){
-        $url = 'http://api.tianapi.com/txapi/pinyin/index?key=APIKEY&text='.$text;
+        $url = 'http://api.tianapi.com/txapi/pinyin/index?key=727f365f887584d5a4d14c685b2b4e5e&text='.$text;
         $client = new Client();
         $res = $client->request('GET',$url,[
             'verify'    => false   //忽略 HTTPS证书 验证
