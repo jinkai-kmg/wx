@@ -102,7 +102,7 @@ class WxController extends Controller
             if (preg_match("/([\x81-\xfe][\x40-\xfe])/", strtolower($data->Content), $match)) {
                 $text = strtolower($data->Content);
                 $content = $this->fanyi($text);
-                echo $this->response($content['newslist']);
+                echo $this->response($content['newslist']['0']['pinyin']);
                 die;
             }
         }
@@ -116,11 +116,9 @@ class WxController extends Controller
     //翻译接口
     public function fanyi($text){
         $url = 'http://api.tianapi.com/txapi/pinyin/index?key=727f365f887584d5a4d14c685b2b4e5e&text='.$text;
-        $client = new Client();
-        $res = $client->request('GET',$url,[
-            'verify'    => false   //忽略 HTTPS证书 验证
-        ]);
-        return json_decode($res->getBody(),true);
+        $get = file_get_contents($url);
+        $json = json_decode($get,true);
+        return $json;
     }
 
     //处理文本消息
