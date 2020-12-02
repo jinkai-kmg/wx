@@ -99,8 +99,9 @@ class WxController extends Controller
 
         //文本回复
         if(strtolower($data->MsgType) == "text") {
-            if (strtolower($data->Content) == "你好") {
-                $content = "你好ya";
+            if (preg_match("/([\x81-\xfe][\x40-\xfe])/", strtolower($data->Content), $match)) {
+                $text = strtolower($data->Content);
+                $content = $this->fanyi($text);
                 echo $this->response($content);
                 die;
             }
@@ -110,6 +111,16 @@ class WxController extends Controller
         if(strtolower($data->MsgType) == "image"){
             $this->imageHandler();
         }
+    }
+
+    //翻译接口
+    public function fanyi($text){
+        $url = 'http://api.tianapi.com/txapi/pinyin/index?key=APIKEY&text='.$text;
+        $client = new Client();
+        $res = $client->request('GET',$url,[
+            'verify'    => false   //忽略 HTTPS证书 验证
+        ]);
+        return json_decode($res->getBody(),true);
     }
 
     //处理文本消息
@@ -337,4 +348,6 @@ class WxController extends Controller
         curl_close($ch);
         return $output;
     }
+
+
 }

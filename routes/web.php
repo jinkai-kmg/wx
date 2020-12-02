@@ -35,8 +35,8 @@ Route::prefix('/api')->group(function(){
     Route::any('/add_cart',"Api\TestController@add_cart")->middleware('check.token');
     Route::any('/cartinfo',"Api\TestController@cartinfo")->middleware('check.token');
     Route::any('/userLogin',"Api\TestController@userLogin");
+    Route::post('/weather',"Api\TestController@weather");        //获取天气
 });
-
 
 
 Route::prefix('/test')->group(function(){

@@ -10,6 +10,7 @@ use GuzzleHttp\Client;
 use App\Models\GoodsModel;
 use App\Models\CartModel;
 use App\Models\XcxwwxModel;
+use App\Models\CityModel;
 
 class TestController extends Controller
 {
@@ -243,4 +244,23 @@ class TestController extends Controller
 
         return $response;
     }
+
+
+    //获取天气
+    public function weather(){
+        $cityInfo = request()->post('cityInfo');
+        if(preg_match('/^[\x7f-\xff]+$/', $cityInfo)){
+            $data = CityModel::where(['cityZh'=>$cityInfo])->first();
+
+        }else{
+            $data = CityModel::where(['cityEn'=>$cityInfo])->first();
+        }
+        $url = 'https://tianqiapi.com/api?version=v6&appid=55551934&appsecret=m6ciJOi7&cityid='.$data['id'];
+        $client = new Client();
+        $res = $client->request('GET',$url,[
+            'verify'    => false   //忽略 HTTPS证书 验证
+        ]);
+        return json_decode($res->getBody(),true);
+    }
+
 }
